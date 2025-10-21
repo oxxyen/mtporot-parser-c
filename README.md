@@ -28,6 +28,50 @@ An autonomous, high-performance C-based parser designed to discover, validate, a
 - **Real-time Logging & Stats**: Timestamped logs and periodic console statistics.
 - **User-Agent Rotation**: Uses a pool of **35 realistic user agents** (desktop, mobile, tablet) to bypass basic blocking.
 
+- ## 🔒 Anti-Detection & Protection Mechanisms
+
+The parser employs multiple advanced techniques to avoid blocking, rate limiting, and fingerprinting by target servers:
+
+### 1. **User-Agent Rotation**
+- Uses a pool of **50+ realistic, up-to-date user agents** covering:
+  - Desktop browsers (Chrome, Firefox, Edge, Safari)
+  - Mobile devices (iOS, Android)
+  - Tablets (iPad, Android tablets)
+  - Niche browsers (Brave, Vivaldi, Yandex, Opera)
+- Random UA is selected for **every request**, mimicking diverse real-world traffic.
+
+### 2. **Request Throttling & Random Delays**
+- Enforces **micro-delays** (`10–25 ms`) between concurrent requests.
+- Adds **random sleep intervals** (`50–200 ms`) before each download task.
+- Implements **10–12 second pauses** between full parsing cycles to avoid aggressive scraping patterns.
+
+### 3. **Connection Hardening**
+- Configures **low-speed timeouts** (`15s @ 1KB/s`) to drop stalled connections.
+- Sets **connection timeout** (`10s`) and **total request timeout** (`30s`).
+- Enables **TCP keep-alive** and **HTTP compression** (`gzip, deflate`) for natural traffic appearance.
+- Allows **up to 5 HTTP redirects** to handle URL chains like real browsers.
+
+### 4. **TLS/SSL Fingerprint Obfuscation**
+- Disables strict certificate verification (`CURLOPT_SSL_VERIFYPEER = 0`) to bypass MITM inspection (common in proxy lists).
+- Uses standard TLS stacks via `libcurl`, inheriting OS-level cipher suite diversity.
+
+### 5. **Proxy Chain Support (Experimental)**
+- Built-in infrastructure for **rotating through external proxy chains** (e.g., residential proxies).
+- 1/3 of requests can optionally route through backup proxies (configurable).
+- Tracks proxy success/failure rates for future optimization.
+
+### 6. **Stealth Headers & Behavior**
+- No custom or suspicious HTTP headers are added.
+- Accepts standard encodings and mimics browser-like `Accept`/`Accept-Language` implicitly via User-Agent.
+- Avoids JavaScript execution or DOM parsing — operates purely at the HTTP/text layer.
+
+### 7. **Resilient Error Handling**
+- Automatically retries failed requests (configurable up to 7 attempts).
+- Gracefully handles network errors, timeouts, and malformed responses without crashing.
+- Continues operation even if individual sources become unavailable.
+
+These measures collectively ensure the parser operates **stealthily, reliably, and sustainably** across hundreds of heterogeneous sources while minimizing the risk of IP bans or CAPTCHA challenges.
+
 ## 🛠️ Requirements
 
 - **Compiler**: GCC or Clang (C11 support required)

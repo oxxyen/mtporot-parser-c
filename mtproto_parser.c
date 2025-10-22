@@ -20,6 +20,7 @@
 //** For security, I use User-Agent Rotation, Request Throttling & Random Delays, Connection Hardening, as described in detail in README.md 
 //* Start: "gcc -o mtpro_parser mtproto_parser.c -lcurl -lpcre2-8-ljansson"
 
+//* All Includes
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <pcre2.h>
 #include <stdio.h>
